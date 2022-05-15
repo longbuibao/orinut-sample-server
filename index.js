@@ -6,10 +6,23 @@ const Order = require("./Orders")
 
 const app = express()
 
+const whitelist = [
+  "https://orinut.vercel.app",
+  "http://localhost:3000",
+  "https://www.orinutmilk.com",
+  "https://orinutmilk.com",
+]
+
 app.use(
   cors({
     credentials: true,
-    origin: "https://orinut.vercel.app",
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
   })
 )
 
